@@ -286,14 +286,14 @@
 
         async function checkServerHealth() {
             try {
-                const response = await fetch('http://localhost:8000/health');
+                const response = await fetch('/health');
                 const data = await response.json();
                 if (data.status !== 'ready') {
                     showError('Server is loading model, please wait...');
                     setTimeout(checkServerHealth, 5000);
                 }
             } catch (e) {
-                showError('Cannot connect to server. Make sure it\'s running on port 8000');
+                showError('Cannot connect to server. Please refresh the page.');
             }
         }
 
@@ -371,7 +371,7 @@
                 formData.append('file', audioBlob, 'recording.webm');
 
                 // Send to server
-                const response = await fetch('http://localhost:8000/transcribe', {
+                const response = await fetch('/transcribe', {
                     method: 'POST',
                     body: formData
                 });
