@@ -7,10 +7,10 @@ To install dependencies:
     pip install fastapi uvicorn transformers torch python-multipart
 
 To run:
-    uvicorn server:app --host 0.0.0.0 --port 8000 --reload
+    uvicorn server:app --host 0.0.0.0 --port 8080
 
 The server will download the Whisper model on first run (~1.5GB).
-Access the API at http://localhost:8000
+Access the API at http://localhost:8080 or http://YOUR_IP:8080
 """
 
 import os
@@ -162,6 +162,6 @@ async def transcribe_audio(file: UploadFile = File(...)):
 if __name__ == "__main__":
     import uvicorn
     import os
-    # Use PORT environment variable if set, otherwise default to 80
-    port = int(os.environ.get("PORT", 80))
+    # Use PORT environment variable if set, otherwise default to 8080
+    port = int(os.environ.get("PORT", 8080))
     uvicorn.run(app, host="0.0.0.0", port=port, reload=True)
