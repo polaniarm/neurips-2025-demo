@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Whisper Transcription Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            flex: 1;
+            min-width: 150px;
+            padding: 15px 25px;
+            font-size: 1.1em;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        #startBtn {
+            background: #4CAF50;
+            color: white;
+        }
+
+        #startBtn:hover:not(:disabled) {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+        }
+
+        #stopBtn {
+            background: #f44336;
+            color: white;
+        }
+
+        #stopBtn:hover:not(:disabled) {
+            background: #da190b;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(244, 67, 54, 0.4);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .status {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-weight: 500;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .status.recording {
+            background: #ffebee;
+            color: #c62828;
+            border: 2px solid #f44336;
+            animation: pulse 2s infinite;
+        }
+
+        .status.processing {
+            background: #e3f2fd;
+            color: #1565c0;
+            border: 2px solid #2196f3;
+        }
+
+        .status.ready {
+            background: #f3e5f5;
+            color: #6a1b9a;
+            border: 2px solid #9c27b0;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        .result-section {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px solid #eee;
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .result-header h2 {
+            color: #333;
+            font-size: 1.5em;
+        }
+
+        .timing {
+            background: #f5f5f5;
+            padding: 8px 15px;
+            border-radius: 20px;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .transcript {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            min-height: 100px;
+            font-size: 1.1em;
+            line-height: 1.6;
+            color: #333;
+            border: 1px solid #e0e0e0;
+        }
+
+        .timestamp-list {
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+            background: #fafafa;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .timestamp-item {
+            display: flex;
+            gap: 15px;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            font-size: 0.95em;
+        }
+
+        .timestamp-item:last-child {
+            border-bottom: none;
+        }
+
+        .timestamp-time {
+            color: #666;
+            font-weight: 600;
+            min-width: 120px;
+            font-family: monospace;
+        }
+
+        .timestamp-text {
+            color: #333;
+            flex: 1;
+        }
+
+        .error {
+            background: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border: 1px solid #f44336;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .audio-preview {
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            text-align: center;
+            color: #999;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎤 Whisper Transcription</h1>
+        <p class="subtitle">OpenAI Whisper Large v3 Turbo - Demo</p>
+
+        <div class="status ready" id="status">
+            Ready to record
+        </div>
+
+        <div class="controls">
+            <button id="startBtn">Start Recording</button>
+            <button id="stopBtn" disabled>Stop & Transcribe</button>
+        </div>
+
+        <audio id="audioPreview" class="audio-preview hidden" controls></audio>
+
+        <div id="resultSection" class="result-section hidden">
+            <div class="result-header">
+                <h2>Transcription</h2>
+                <span class="timing" id="timing"></span>
+            </div>
+
+            <div class="transcript" id="transcript">
+                Waiting for transcription...
+            </div>
+
+            <div id="timestampsSection" class="hidden">
+                <h3 style="margin: 20px 0 10px; color: #333;">Word Timestamps</h3>
+                <div class="timestamp-list" id="timestamps"></div>
+            </div>
+        </div>
+
+        <div id="error" class="error hidden"></div>
+
+        <footer>
+            <p>Demo version for supervised use</p>
+        </footer>
+    </div>
+
+    <script>
+        let mediaRecorder;
+        let audioChunks = [];
+        let isRecording = false;
+
+        const startBtn = document.getElementById('startBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const status = document.getElementById('status');
+        const transcript = document.getElementById('transcript');
+        const timing = document.getElementById('timing');
+        const timestamps = document.getElementById('timestamps');
+        const timestampsSection = document.getElementById('timestampsSection');
+        const resultSection = document.getElementById('resultSection');
+        const errorDiv = document.getElementById('error');
+        const audioPreview = document.getElementById('audioPreview');
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            checkServerHealth();
+        });
+
+        async function checkServerHealth() {
+            try {
+                const response = await fetch('http://localhost:8000/health');
+                const data = await response.json();
+                if (data.status !== 'ready') {
+                    showError('Server is loading model, please wait...');
+                    setTimeout(checkServerHealth, 5000);
+                }
+            } catch (e) {
+                showError('Cannot connect to server. Make sure it\'s running on port 8000');
+            }
+        }
+
+        startBtn.addEventListener('click', async () => {
+            try {
+                // Request microphone access
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+                // Create MediaRecorder with WebM format
+                const options = {
+                    mimeType: 'audio/webm;codecs=opus'
+                };
+
+                // Fallback for browsers that don't support WebM
+                if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+                    options.mimeType = 'audio/webm';
+                    if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+                        options.mimeType = '';
+                    }
+                }
+
+                mediaRecorder = new MediaRecorder(stream, options);
+                audioChunks = [];
+
+                mediaRecorder.ondataavailable = (event) => {
+                    audioChunks.push(event.data);
+                };
+
+                mediaRecorder.onstop = async () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    await transcribeAudio(audioBlob);
+
+                    // Show audio preview
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    audioPreview.src = audioUrl;
+                    audioPreview.classList.remove('hidden');
+                };
+
+                // Start recording
+                mediaRecorder.start();
+                isRecording = true;
+
+                // Update UI
+                startBtn.disabled = true;
+                stopBtn.disabled = false;
+                status.className = 'status recording';
+                status.textContent = '🔴 Recording... Speak now!';
+                hideError();
+                resultSection.classList.add('hidden');
+
+            } catch (err) {
+                showError('Microphone access denied. Please allow microphone access and try again.');
+                console.error('Error accessing microphone:', err);
+            }
+        });
+
+        stopBtn.addEventListener('click', () => {
+            if (mediaRecorder && isRecording) {
+                mediaRecorder.stop();
+                mediaRecorder.stream.getTracks().forEach(track => track.stop());
+                isRecording = false;
+
+                // Update UI
+                startBtn.disabled = false;
+                stopBtn.disabled = true;
+                status.className = 'status processing';
+                status.textContent = '⏳ Processing audio...';
+            }
+        });
+
+        async function transcribeAudio(audioBlob) {
+            try {
+                // Create FormData and append the audio file
+                const formData = new FormData();
+                formData.append('file', audioBlob, 'recording.webm');
+
+                // Send to server
+                const response = await fetch('http://localhost:8000/transcribe', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Server error: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+
+                // Display results
+                displayResults(data);
+
+            } catch (err) {
+                showError(`Transcription failed: ${err.message}`);
+                console.error('Transcription error:', err);
+            } finally {
+                // Reset status
+                status.className = 'status ready';
+                status.textContent = 'Ready to record';
+            }
+        }
+
+        function displayResults(data) {
+            // Show result section
+            resultSection.classList.remove('hidden');
+
+            // Display transcript
+            transcript.textContent = data.text || 'No transcription available';
+
+            // Display timing
+            timing.textContent = `Processed in ${data.elapsed_seconds}s`;
+
+            // Display timestamps if available
+            if (data.timestamps && data.timestamps.length > 0) {
+                timestampsSection.classList.remove('hidden');
+                timestamps.innerHTML = data.timestamps.map(ts => `
+                    <div class="timestamp-item">
+                        <span class="timestamp-time">${formatTime(ts.start)} - ${formatTime(ts.end)}</span>
+                        <span class="timestamp-text">${ts.text}</span>
+                    </div>
+                `).join('');
+            } else {
+                timestampsSection.classList.add('hidden');
+            }
+
+            hideError();
+        }
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = (seconds % 60).toFixed(2);
+            return `${mins}:${secs.padStart(5, '0')}`;
+        }
+
+        function showError(message) {
+            errorDiv.textContent = message;
+            errorDiv.classList.remove('hidden');
+        }
+
+        function hideError() {
+            errorDiv.classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
