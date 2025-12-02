@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Whisper Transcription Demo</title>
+    <title>Whisper on ARM - NeurIPS 2025 Demo</title>
     <style>
         * {
             margin: 0;
@@ -228,8 +228,8 @@
 </head>
 <body>
     <div class="container">
-        <h1>🎤 Whisper Transcription</h1>
-        <p class="subtitle">OpenAI Whisper Large v3 Turbo - Demo</p>
+        <h1>Accelerate Whisper on ARM</h1>
+        <p class="subtitle">Whisper ASR with Hugging Face Transformers on ARM Infrastructure</p>
 
         <div class="status ready" id="status">
             Ready to record
@@ -261,7 +261,7 @@
         <div id="error" class="error hidden"></div>
 
         <footer>
-            <p>Demo version for supervised use</p>
+            <p>ARM Learning Path - NeurIPS 2025 Demonstration</p>
         </footer>
     </div>
 
@@ -342,7 +342,7 @@
                 startBtn.disabled = true;
                 stopBtn.disabled = false;
                 status.className = 'status recording';
-                status.textContent = '🔴 Recording... Speak now!';
+                status.textContent = 'Recording in progress... Please speak clearly';
                 hideError();
                 resultSection.classList.add('hidden');
 
@@ -362,7 +362,7 @@
                 startBtn.disabled = false;
                 stopBtn.disabled = true;
                 status.className = 'status processing';
-                status.textContent = '⏳ Processing audio...';
+                status.textContent = 'Processing audio...';
             }
         });
 

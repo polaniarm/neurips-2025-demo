@@ -49,7 +49,7 @@ MODEL_ID = "openai/whisper-large-v3-turbo"
 async def load_model():
     """Load Whisper model at startup"""
     global asr_pipeline
-    print(f"🚀 Loading Whisper model: {MODEL_ID}")
+    print(f"Loading Whisper model: {MODEL_ID}")
     print("This will take a minute on first run...")
 
     try:
@@ -60,9 +60,9 @@ async def load_model():
             device="cpu",
             torch_dtype=torch.float32,
         )
-        print("✅ Model loaded successfully!")
+        print("Model loaded successfully!")
     except Exception as e:
-        print(f"❌ Error loading model: {e}")
+        print(f"Error loading model: {e}")
         raise
 
 
@@ -117,7 +117,7 @@ async def transcribe_audio(file: UploadFile = File(...)):
         temp_file.write(content)
         temp_file.close()
 
-        print(f"📎 Processing: {file.filename} ({len(content):,} bytes)")
+        print(f"Processing: {file.filename} ({len(content):,} bytes)")
 
         # Transcribe
         start_time = time.time()
@@ -141,7 +141,7 @@ async def transcribe_audio(file: UploadFile = File(...)):
                     "text": chunk.get("text", "").strip()
                 })
 
-        print(f"✅ Transcribed in {elapsed:.2f}s: {text[:100]}...")
+        print(f"Transcribed in {elapsed:.2f}s: {text[:100]}...")
 
         return {
             "text": text,
@@ -150,7 +150,7 @@ async def transcribe_audio(file: UploadFile = File(...)):
         }
 
     except Exception as e:
-        print(f"❌ Transcription error: {e}")
+        print(f"Transcription error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
     finally:
