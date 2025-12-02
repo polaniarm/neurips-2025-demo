@@ -1,10 +1,10 @@
-# Whisper ASR on ARM Demo
+# Whisper ASR on Arm Demo
 
-Web-based automatic speech recognition using OpenAI's Whisper model on ARM infrastructure.
+Web-based automatic speech recognition using OpenAI's Whisper model on Arm infrastructure.
 
 ## Overview
 
-This demo shows Whisper Large v3 Turbo running on ARM CPUs using Hugging Face Transformers. It provides a browser interface for audio recording and transcription.
+This demo shows Whisper Large v3 Turbo running on Arm CPUs using Hugging Face Transformers. It provides a browser interface for audio recording and transcription.
 
 ## Components
 
