@@ -13,7 +13,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: #000;
+            background: #080225;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -164,40 +164,6 @@
             border: 1px solid rgba(114, 51, 247, 0.3);
         }
 
-        .timestamp-list {
-            margin-top: 20px;
-            max-height: 300px;
-            overflow-y: auto;
-            background: #0a0a0a;
-            padding: 15px;
-            border-radius: 10px;
-            border: 1px solid rgba(114, 51, 247, 0.3);
-        }
-
-        .timestamp-item {
-            display: flex;
-            gap: 15px;
-            padding: 10px;
-            border-bottom: 1px solid rgba(114, 51, 247, 0.2);
-            font-size: 0.95em;
-        }
-
-        .timestamp-item:last-child {
-            border-bottom: none;
-        }
-
-        .timestamp-time {
-            color: #7233f7;
-            font-weight: 600;
-            min-width: 120px;
-            font-family: monospace;
-        }
-
-        .timestamp-text {
-            color: #E6E6E9;
-            flex: 1;
-        }
-
         .error {
             background: rgba(255, 68, 68, 0.1);
             color: #ff4444;
@@ -228,8 +194,13 @@
 </head>
 <body>
     <div class="container">
-        <h1>Accelerate Whisper on ARM</h1>
-        <p class="subtitle">Whisper ASR with Hugging Face Transformers on ARM Infrastructure</p>
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px;">
+            <div>
+                <h1>Accelerate Whisper on ARM</h1>
+                <p class="subtitle">Whisper ASR with Hugging Face Transformers on ARM Infrastructure</p>
+            </div>
+            <img src="assets/arm_brand_logo_guidelines_300x175px_01.png" alt="ARM Logo" style="height: 60px; width: auto;">
+        </div>
 
         <div class="status ready" id="status">
             Ready to record
@@ -252,10 +223,6 @@
                 Waiting for transcription...
             </div>
 
-            <div id="timestampsSection" class="hidden">
-                <h3 style="margin: 20px 0 10px; color: #333;">Word Timestamps</h3>
-                <div class="timestamp-list" id="timestamps"></div>
-            </div>
         </div>
 
         <div id="error" class="error hidden"></div>
@@ -275,8 +242,6 @@
         const status = document.getElementById('status');
         const transcript = document.getElementById('transcript');
         const timing = document.getElementById('timing');
-        const timestamps = document.getElementById('timestamps');
-        const timestampsSection = document.getElementById('timestampsSection');
         const resultSection = document.getElementById('resultSection');
         const errorDiv = document.getElementById('error');
         const audioPreview = document.getElementById('audioPreview');
@@ -407,26 +372,7 @@
             // Display timing
             timing.textContent = `Processed in ${data.elapsed_seconds}s`;
 
-            // Display timestamps if available
-            if (data.timestamps && data.timestamps.length > 0) {
-                timestampsSection.classList.remove('hidden');
-                timestamps.innerHTML = data.timestamps.map(ts => `
-                    <div class="timestamp-item">
-                        <span class="timestamp-time">${formatTime(ts.start)} - ${formatTime(ts.end)}</span>
-                        <span class="timestamp-text">${ts.text}</span>
-                    </div>
-                `).join('');
-            } else {
-                timestampsSection.classList.add('hidden');
-            }
-
             hideError();
-        }
-
-        function formatTime(seconds) {
-            const mins = Math.floor(seconds / 60);
-            const secs = (seconds % 60).toFixed(2);
-            return `${mins}:${secs.padStart(5, '0')}`;
         }
 
         function showError(message) {

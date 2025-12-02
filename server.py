@@ -24,12 +24,16 @@ from pathlib import Path
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
 import torch
 from transformers import pipeline
 
 
 # Initialize FastAPI
 app = FastAPI(title="Whisper Transcription Demo")
+
+# Mount static files for assets
+app.mount("/assets", StaticFiles(directory="assets"), name="assets")
 
 # Enable CORS for browser access
 app.add_middleware(
