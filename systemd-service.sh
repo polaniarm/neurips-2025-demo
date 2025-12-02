@@ -12,8 +12,8 @@ After=network.target
 Type=simple
 User=ubuntu
 WorkingDirectory=/home/ubuntu/neurips-2025-demo
-Environment="PATH=/home/ubuntu/neurips-2025-demo/venv/bin"
-ExecStart=/home/ubuntu/neurips-2025-demo/venv/bin/uvicorn server:app --host 127.0.0.1 --port 8000
+Environment="PATH=/home/ubuntu/neurips-2025-demo/whisper-env/bin"
+ExecStart=/home/ubuntu/neurips-2025-demo/whisper-env/bin/uvicorn server:app --host 127.0.0.1 --port 8000
 Restart=on-failure
 RestartSec=10
 
