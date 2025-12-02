@@ -5,6 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Whisper on ARM - NeurIPS 2025 Demo</title>
     <style>
+        @font-face {
+            font-family: 'Aeonik';
+            src: url('assets/fonts/Aeonik-Full-Family-Web/Aeonik-Regular.woff2') format('woff2'),
+                 url('assets/fonts/Aeonik-Full-Family-Web/Aeonik-Regular.woff') format('woff');
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Aeonik';
+            src: url('assets/fonts/Aeonik-Full-Family-Web/Aeonik-Medium.woff2') format('woff2'),
+                 url('assets/fonts/Aeonik-Full-Family-Web/Aeonik-Medium.woff') format('woff');
+            font-weight: 500;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Aeonik';
+            src: url('assets/fonts/Aeonik-Full-Family-Web/Aeonik-SemiBold.woff2') format('woff2'),
+                 url('assets/fonts/Aeonik-Full-Family-Web/Aeonik-SemiBold.woff') format('woff');
+            font-weight: 600;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Aeonik';
+            src: url('assets/fonts/Aeonik-Full-Family-Web/Aeonik-Bold.woff2') format('woff2'),
+                 url('assets/fonts/Aeonik-Full-Family-Web/Aeonik-Bold.woff') format('woff');
+            font-weight: 700;
+            font-style: normal;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -12,7 +44,7 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-family: 'Aeonik', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background: #080225;
             min-height: 100vh;
             display: flex;
