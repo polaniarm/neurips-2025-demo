@@ -13,7 +13,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #000;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -22,22 +22,23 @@
         }
 
         .container {
-            background: white;
+            background: #1a1a1a;
             border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 60px rgba(114, 51, 247, 0.2);
+            border: 1px solid rgba(114, 51, 247, 0.3);
             padding: 40px;
             max-width: 800px;
             width: 100%;
         }
 
         h1 {
-            color: #333;
+            color: #E6E6E9;
             margin-bottom: 10px;
             font-size: 2.5em;
         }
 
         .subtitle {
-            color: #666;
+            color: #999;
             margin-bottom: 30px;
             font-size: 1.1em;
         }
@@ -64,25 +65,26 @@
         }
 
         #startBtn {
-            background: #4CAF50;
+            background: #7233f7;
             color: white;
         }
 
         #startBtn:hover:not(:disabled) {
-            background: #45a049;
+            background: #5a1ee5;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+            box-shadow: 0 5px 15px rgba(114, 51, 247, 0.4);
         }
 
         #stopBtn {
-            background: #f44336;
+            background: #333;
             color: white;
+            border: 2px solid #7233f7;
         }
 
         #stopBtn:hover:not(:disabled) {
-            background: #da190b;
+            background: #7233f7;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(244, 67, 54, 0.4);
+            box-shadow: 0 5px 15px rgba(114, 51, 247, 0.4);
         }
 
         button:disabled {
@@ -101,22 +103,22 @@
         }
 
         .status.recording {
-            background: #ffebee;
-            color: #c62828;
-            border: 2px solid #f44336;
+            background: rgba(114, 51, 247, 0.1);
+            color: #ff4444;
+            border: 2px solid #ff4444;
             animation: pulse 2s infinite;
         }
 
         .status.processing {
-            background: #e3f2fd;
-            color: #1565c0;
-            border: 2px solid #2196f3;
+            background: rgba(114, 51, 247, 0.1);
+            color: #7233f7;
+            border: 2px solid #7233f7;
         }
 
         .status.ready {
-            background: #f3e5f5;
-            color: #6a1b9a;
-            border: 2px solid #9c27b0;
+            background: rgba(114, 51, 247, 0.05);
+            color: #d1bafc;
+            border: 2px solid rgba(114, 51, 247, 0.5);
         }
 
         @keyframes pulse {
@@ -139,44 +141,44 @@
         }
 
         .result-header h2 {
-            color: #333;
+            color: #E6E6E9;
             font-size: 1.5em;
         }
 
         .timing {
-            background: #f5f5f5;
+            background: rgba(114, 51, 247, 0.1);
             padding: 8px 15px;
             border-radius: 20px;
-            color: #666;
+            color: #d1bafc;
             font-size: 0.9em;
         }
 
         .transcript {
-            background: #f9f9f9;
+            background: #0a0a0a;
             padding: 20px;
             border-radius: 10px;
             min-height: 100px;
             font-size: 1.1em;
             line-height: 1.6;
-            color: #333;
-            border: 1px solid #e0e0e0;
+            color: #E6E6E9;
+            border: 1px solid rgba(114, 51, 247, 0.3);
         }
 
         .timestamp-list {
             margin-top: 20px;
             max-height: 300px;
             overflow-y: auto;
-            background: #fafafa;
+            background: #0a0a0a;
             padding: 15px;
             border-radius: 10px;
-            border: 1px solid #e0e0e0;
+            border: 1px solid rgba(114, 51, 247, 0.3);
         }
 
         .timestamp-item {
             display: flex;
             gap: 15px;
             padding: 10px;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid rgba(114, 51, 247, 0.2);
             font-size: 0.95em;
         }
 
@@ -185,24 +187,24 @@
         }
 
         .timestamp-time {
-            color: #666;
+            color: #7233f7;
             font-weight: 600;
             min-width: 120px;
             font-family: monospace;
         }
 
         .timestamp-text {
-            color: #333;
+            color: #E6E6E9;
             flex: 1;
         }
 
         .error {
-            background: #ffebee;
-            color: #c62828;
+            background: rgba(255, 68, 68, 0.1);
+            color: #ff4444;
             padding: 15px;
             border-radius: 10px;
             margin-top: 20px;
-            border: 1px solid #f44336;
+            border: 1px solid #ff4444;
         }
 
         .hidden {
@@ -217,9 +219,9 @@
         footer {
             margin-top: 30px;
             padding-top: 20px;
-            border-top: 1px solid #eee;
+            border-top: 1px solid rgba(114, 51, 247, 0.2);
             text-align: center;
-            color: #999;
+            color: #666;
             font-size: 0.9em;
         }
     </style>
