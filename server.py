@@ -6,11 +6,14 @@ Model: openai/whisper-large-v3-turbo
 To install dependencies:
     pip install fastapi uvicorn transformers torch python-multipart
 
-To run:
+To run (direct access):
     uvicorn server:app --host 0.0.0.0 --port 8080
 
+To run (behind nginx):
+    uvicorn server:app --host 127.0.0.1 --port 8000
+
 The server will download the Whisper model on first run (~1.5GB).
-Access the API at http://localhost:8080 or http://YOUR_IP:8080
+Access at http://localhost:8080 (direct) or via nginx proxy
 """
 
 import os
@@ -162,6 +165,6 @@ async def transcribe_audio(file: UploadFile = File(...)):
 if __name__ == "__main__":
     import uvicorn
     import os
-    # Use PORT environment variable if set, otherwise default to 8080
-    port = int(os.environ.get("PORT", 8080))
+    # Use PORT environment variable if set, otherwise default to 8000
+    port = int(os.environ.get("PORT", 8000))
     uvicorn.run(app, host="0.0.0.0", port=port, reload=True)
