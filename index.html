@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Whisper on ARM - NeurIPS 2025 Demo</title>
+    <link rel="stylesheet" href="assets/fonts/Aeonik-Full-Family-Web/css/stylesheet-family-support.css">
     <style>
         @font-face {
             font-family: 'Aeonik';
@@ -11,22 +12,7 @@
                  url('assets/fonts/Aeonik-Full-Family-Web/Aeonik-Regular.woff') format('woff');
             font-weight: 400;
             font-style: normal;
-        }
-
-        @font-face {
-            font-family: 'Aeonik';
-            src: url('assets/fonts/Aeonik-Full-Family-Web/Aeonik-Medium.woff2') format('woff2'),
-                 url('assets/fonts/Aeonik-Full-Family-Web/Aeonik-Medium.woff') format('woff');
-            font-weight: 500;
-            font-style: normal;
-        }
-
-        @font-face {
-            font-family: 'Aeonik';
-            src: url('assets/fonts/Aeonik-Full-Family-Web/Aeonik-SemiBold.woff2') format('woff2'),
-                 url('assets/fonts/Aeonik-Full-Family-Web/Aeonik-SemiBold.woff') format('woff');
-            font-weight: 600;
-            font-style: normal;
+            font-display: swap;
         }
 
         @font-face {
@@ -35,6 +21,7 @@
                  url('assets/fonts/Aeonik-Full-Family-Web/Aeonik-Bold.woff') format('woff');
             font-weight: 700;
             font-style: normal;
+            font-display: swap;
         }
 
         * {
@@ -67,6 +54,8 @@
             color: #E6E6E9;
             margin-bottom: 10px;
             font-size: 2.5em;
+            font-weight: 700;
+            letter-spacing: -0.02em;
         }
 
         .subtitle {
@@ -87,13 +76,14 @@
             min-width: 150px;
             padding: 15px 25px;
             font-size: 1.1em;
+            font-family: 'Aeonik', sans-serif;
             font-weight: 600;
             border: none;
             border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s ease;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.05em;
         }
 
         #startBtn {
