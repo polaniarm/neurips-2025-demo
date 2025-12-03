@@ -46,13 +46,59 @@
         }
 
         .container {
-            background: #1a1a1a;
+            background: #2a2a4a;
             border-radius: 20px;
             box-shadow: 0 20px 60px rgba(114, 51, 247, 0.2);
             border: 1px solid rgba(114, 51, 247, 0.3);
-            padding: 40px;
+            padding: 60px;
             max-width: 800px;
             width: 100%;
+            min-height: 450px;
+            position: relative;
+        }
+
+        .screen {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 350px;
+        }
+
+        #recordingScreen {
+            align-items: flex-start;
+            justify-content: flex-start;
+        }
+
+        .record-button {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #ff4444;
+            border: 6px solid white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(255, 68, 68, 0.4);
+        }
+
+        .record-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 25px rgba(255, 68, 68, 0.6);
+        }
+
+        .record-button:active {
+            transform: scale(0.98);
+        }
+
+        .instruction-text {
+            margin-top: 30px;
+            color: #E6E6E9;
+            font-size: 1.1em;
+            font-family: 'Aeonik-Regular', sans-serif;
         }
 
         h1 {
@@ -227,17 +273,31 @@
             <img src="assets/NeurIPS-425x190-arm.png" alt="NeurIPS Logo" style="height: 65px; width: auto;">
         </div>
 
-        <div class="container">
-        <h1>Accelerate Whisper on Arm</h1>
-        <p class="subtitle">Whisper ASR with Hugging Face Transformers on Arm Infrastructure</p>
-
-        <div class="status ready" id="status">
-            Ready to record
+        <div class="container" id="mainContainer">
+        <!-- Initial Screen -->
+        <div id="initialScreen" class="screen">
+            <button id="recordButton" class="record-button">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 14.5c1.66 0 3-1.34 3-3V6c0-1.66-1.34-3-3-3S9 4.34 9 6v5.5c0 1.66 1.34 3 3 3z"/>
+                    <path d="M17 11.5c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+                </svg>
+            </button>
+            <p class="instruction-text">Press the button to start recording</p>
         </div>
 
-        <div class="controls">
-            <button id="startBtn">Start Recording</button>
-            <button id="stopBtn" disabled>Stop & Transcribe</button>
+        <!-- Recording Screen (hidden initially) -->
+        <div id="recordingScreen" class="screen hidden">
+            <h1>Accelerate Whisper on Arm</h1>
+            <p class="subtitle">Whisper ASR with Hugging Face Transformers on Arm Infrastructure</p>
+
+            <div class="status ready" id="status">
+                Ready to record
+            </div>
+
+            <div class="controls">
+                <button id="startBtn">Start Recording</button>
+                <button id="stopBtn" disabled>Stop & Transcribe</button>
+            </div>
         </div>
 
         <audio id="audioPreview" class="audio-preview hidden" controls></audio>
@@ -267,6 +327,12 @@
         let audioChunks = [];
         let isRecording = false;
 
+        // Screens
+        const initialScreen = document.getElementById('initialScreen');
+        const recordingScreen = document.getElementById('recordingScreen');
+        const recordButton = document.getElementById('recordButton');
+
+        // Original controls
         const startBtn = document.getElementById('startBtn');
         const stopBtn = document.getElementById('stopBtn');
         const status = document.getElementById('status');
@@ -279,6 +345,16 @@
         // Initialize on page load
         window.addEventListener('DOMContentLoaded', () => {
             checkServerHealth();
+        });
+
+        // Handle initial record button click
+        recordButton.addEventListener('click', async () => {
+            initialScreen.classList.add('hidden');
+            recordingScreen.classList.remove('hidden');
+            // Automatically start recording
+            setTimeout(() => {
+                startBtn.click();
+            }, 300);
         });
 
         async function checkServerHealth() {
