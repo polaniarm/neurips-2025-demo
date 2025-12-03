@@ -66,8 +66,76 @@
         }
 
         #recordingScreen {
-            align-items: flex-start;
-            justify-content: flex-start;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .timer {
+            color: #999;
+            font-size: 1.8em;
+            font-family: 'Aeonik-Regular', sans-serif;
+            margin-bottom: 40px;
+            letter-spacing: 0.05em;
+        }
+
+        .wave-container {
+            margin: 40px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .wave-visual {
+            width: auto;
+            height: auto;
+            max-width: 100%;
+        }
+
+        .recording-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 80px;
+            margin-top: 40px;
+        }
+
+        .stop-button {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            transition: transform 0.3s ease;
+        }
+
+        .stop-button:hover {
+            transform: scale(1.05);
+        }
+
+        .stop-button:active {
+            transform: scale(0.98);
+        }
+
+        .stop-button img {
+            width: auto;
+            height: auto;
+            display: block;
+        }
+
+        .text-button {
+            background: transparent;
+            color: #E6E6E9;
+            border: none;
+            font-family: 'Aeonik-Regular', sans-serif;
+            font-size: 1.2em;
+            cursor: pointer;
+            padding: 10px 20px;
+            transition: opacity 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .text-button:hover {
+            opacity: 0.7;
         }
 
         .record-button {
@@ -292,16 +360,20 @@
 
         <!-- Recording Screen (hidden initially) -->
         <div id="recordingScreen" class="screen hidden">
-            <h1>Accelerate Whisper on Arm</h1>
-            <p class="subtitle">Whisper ASR with Hugging Face Transformers on Arm Infrastructure</p>
+            <div class="timer" id="timer">00:00.00</div>
 
-            <div class="status ready" id="status">
-                Ready to record
+            <div class="wave-container">
+                <img src="assets/wave.png" alt="Wave" class="wave-visual" />
             </div>
 
-            <div class="controls">
-                <button id="startBtn">Start Recording</button>
-                <button id="stopBtn" disabled>Stop & Transcribe</button>
+            <div class="recording-controls">
+                <button id="cancelBtn" class="text-button">Cancel</button>
+
+                <button id="stopBtn" class="stop-button">
+                    <img src="assets/stop-pause.png" alt="Stop" />
+                </button>
+
+                <button id="finishBtn" class="text-button">FINISH</button>
             </div>
         </div>
 
@@ -336,16 +408,19 @@
         let mediaRecorder;
         let audioChunks = [];
         let isRecording = false;
+        let recordingStartTime;
+        let timerInterval;
 
         // Screens
         const initialScreen = document.getElementById('initialScreen');
         const recordingScreen = document.getElementById('recordingScreen');
         const recordButton = document.getElementById('recordButton');
 
-        // Original controls
-        const startBtn = document.getElementById('startBtn');
+        // Controls
+        const cancelBtn = document.getElementById('cancelBtn');
         const stopBtn = document.getElementById('stopBtn');
-        const status = document.getElementById('status');
+        const finishBtn = document.getElementById('finishBtn');
+        const timer = document.getElementById('timer');
         const transcript = document.getElementById('transcript');
         const timing = document.getElementById('timing');
         const resultSection = document.getElementById('resultSection');
@@ -363,9 +438,35 @@
             recordingScreen.classList.remove('hidden');
             // Automatically start recording
             setTimeout(() => {
-                startBtn.click();
+                startRecording();
             }, 300);
         });
+
+        // Timer functions
+        function startTimer() {
+            recordingStartTime = Date.now();
+            timerInterval = setInterval(updateTimer, 10);
+        }
+
+        function stopTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+        }
+
+        function updateTimer() {
+            const elapsed = Date.now() - recordingStartTime;
+            const minutes = Math.floor(elapsed / 60000);
+            const seconds = Math.floor((elapsed % 60000) / 1000);
+            const centiseconds = Math.floor((elapsed % 1000) / 10);
+            timer.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${String(centiseconds).padStart(2, '0')}`;
+        }
+
+        function resetTimer() {
+            stopTimer();
+            timer.textContent = '00:00.00';
+        }
 
         async function checkServerHealth() {
             try {
@@ -380,7 +481,7 @@
             }
         }
 
-        startBtn.addEventListener('click', async () => {
+        async function startRecording() {
             try {
                 // Request microphone access
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -407,43 +508,65 @@
 
                 mediaRecorder.onstop = async () => {
                     const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-                    await transcribeAudio(audioBlob);
 
-                    // Show audio preview
-                    const audioUrl = URL.createObjectURL(audioBlob);
-                    audioPreview.src = audioUrl;
-                    audioPreview.classList.remove('hidden');
+                    // Only transcribe if we're finishing, not canceling
+                    if (!window.canceledRecording) {
+                        await transcribeAudio(audioBlob);
+
+                        // Show audio preview
+                        const audioUrl = URL.createObjectURL(audioBlob);
+                        audioPreview.src = audioUrl;
+                        audioPreview.classList.remove('hidden');
+                    }
                 };
 
                 // Start recording
                 mediaRecorder.start();
                 isRecording = true;
+                window.canceledRecording = false;
+
+                // Start timer
+                startTimer();
 
                 // Update UI
-                startBtn.disabled = true;
-                stopBtn.disabled = false;
-                status.className = 'status recording';
-                status.textContent = 'Recording in progress... Please speak clearly';
                 hideError();
                 resultSection.classList.add('hidden');
 
             } catch (err) {
                 showError('Microphone access denied. Please allow microphone access and try again.');
                 console.error('Error accessing microphone:', err);
+                // Return to initial screen
+                recordingScreen.classList.add('hidden');
+                initialScreen.classList.remove('hidden');
             }
-        });
+        }
 
-        stopBtn.addEventListener('click', () => {
+        // Cancel button - go back to initial screen
+        cancelBtn.addEventListener('click', () => {
             if (mediaRecorder && isRecording) {
+                window.canceledRecording = true;
                 mediaRecorder.stop();
                 mediaRecorder.stream.getTracks().forEach(track => track.stop());
                 isRecording = false;
+            }
+            resetTimer();
+            recordingScreen.classList.add('hidden');
+            initialScreen.classList.remove('hidden');
+        });
 
-                // Update UI
-                startBtn.disabled = false;
-                stopBtn.disabled = true;
-                status.className = 'status processing';
-                status.textContent = 'Processing audio...';
+        // Stop button - pause/resume recording
+        stopBtn.addEventListener('click', () => {
+            // For now, just act as a pause button (no-op)
+            // You could implement pause/resume functionality here
+        });
+
+        // Finish button - stop and transcribe
+        finishBtn.addEventListener('click', () => {
+            if (mediaRecorder && isRecording) {
+                stopTimer();
+                mediaRecorder.stop();
+                mediaRecorder.stream.getTracks().forEach(track => track.stop());
+                isRecording = false;
             }
         });
 
@@ -472,9 +595,12 @@
                 showError(`Transcription failed: ${err.message}`);
                 console.error('Transcription error:', err);
             } finally {
-                // Reset status
-                status.className = 'status ready';
-                status.textContent = 'Ready to record';
+                // Return to initial screen after transcription
+                setTimeout(() => {
+                    recordingScreen.classList.add('hidden');
+                    initialScreen.classList.remove('hidden');
+                    resetTimer();
+                }, 3000);
             }
         }
 
