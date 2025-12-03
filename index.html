@@ -224,23 +224,37 @@
 
         /* Transcription Screen Styles */
         #transcriptionScreen {
-            align-items: flex-start;
+            align-items: center;
             justify-content: flex-start;
             padding: 40px;
+        }
+
+        .transcription-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 30px;
         }
 
         .demo-title {
             color: #E6E6E9;
             font-family: 'Aeonik-Bold', sans-serif;
             font-size: 2em;
-            margin-bottom: 30px;
+            margin: 0;
             font-weight: normal;
+        }
+
+        .processing-time {
+            color: #666;
+            font-family: 'Aeonik-Regular', sans-serif;
+            font-size: 0.9em;
         }
 
         .transcription-content {
             flex: 1;
             overflow-y: auto;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
 
         .transcription-text {
@@ -249,14 +263,6 @@
             font-size: 1.15em;
             line-height: 1.6;
             text-align: left;
-        }
-
-        .processing-time {
-            color: #666;
-            font-family: 'Aeonik-Regular', sans-serif;
-            font-size: 0.9em;
-            margin-top: auto;
-            margin-bottom: 20px;
         }
 
         .done-button {
@@ -348,11 +354,13 @@
 
         <!-- Transcription Screen (hidden initially) -->
         <div id="transcriptionScreen" class="screen hidden">
-            <h2 class="demo-title">Transcription</h2>
+            <div class="transcription-header">
+                <h2 class="demo-title">Transcription</h2>
+                <div class="processing-time" id="processingTime"></div>
+            </div>
             <div class="transcription-content">
                 <p id="transcriptionText" class="transcription-text"></p>
             </div>
-            <div class="processing-time" id="processingTime"></div>
             <button id="doneBtn" class="done-button">Done</button>
         </div>
 
