@@ -177,110 +177,16 @@
             font-family: 'Aeonik-Regular', sans-serif;
         }
 
-        h1 {
-            font-family: 'Aeonik-Bold', sans-serif;
-            color: #E6E6E9;
-            margin-bottom: 10px;
-            font-size: 2.5em;
-            font-weight: normal;
-            letter-spacing: -0.02em;
-        }
-
-        .subtitle {
-            color: #999;
-            margin-bottom: 30px;
-            font-size: 1.1em;
-        }
-
-        .controls {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
-
-        button {
-            flex: 1;
-            min-width: 150px;
-            padding: 15px 25px;
-            font-size: 1.1em;
-            font-family: 'Aeonik-SemiBold', sans-serif;
-            font-weight: normal;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        #startBtn {
-            background: #7233f7;
-            color: white;
-        }
-
-        #startBtn:hover:not(:disabled) {
-            background: #5a1ee5;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(114, 51, 247, 0.4);
-        }
-
-        #stopBtn {
-            background: #333;
-            color: white;
-            border: 2px solid #7233f7;
-        }
-
-        #stopBtn:hover:not(:disabled) {
-            background: #7233f7;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(114, 51, 247, 0.4);
-        }
-
-        button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none !important;
-        }
-
-        .status {
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            font-weight: 500;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        .status.recording {
-            background: rgba(114, 51, 247, 0.1);
-            color: #ff4444;
-            border: 2px solid #ff4444;
-            animation: pulse 2s infinite;
-        }
-
-        .status.processing {
-            background: rgba(114, 51, 247, 0.1);
-            color: #7233f7;
-            border: 2px solid #7233f7;
-        }
-
-        .status.ready {
-            background: rgba(114, 51, 247, 0.05);
-            color: #d1bafc;
-            border: 2px solid rgba(114, 51, 247, 0.5);
-        }
-
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.7; }
-            100% { opacity: 1; }
-        }
 
         .result-section {
             margin-top: 30px;
             padding-top: 30px;
             border-top: 2px solid #eee;
+            display: none;
+        }
+
+        .result-section:not(.hidden) {
+            display: block;
         }
 
         .result-header {
@@ -330,6 +236,11 @@
         .audio-preview {
             margin-top: 20px;
             width: 100%;
+            display: none;
+        }
+
+        .audio-preview:not(.hidden) {
+            display: block;
         }
 
         footer {
@@ -377,22 +288,19 @@
             </div>
         </div>
 
-        <audio id="audioPreview" class="audio-preview hidden" controls></audio>
+        </div>
 
+        <audio id="audioPreview" class="audio-preview hidden" controls></audio>
         <div id="resultSection" class="result-section hidden">
             <div class="result-header">
                 <h2>Transcription</h2>
                 <span class="timing" id="timing"></span>
             </div>
-
             <div class="transcript" id="transcript">
                 Waiting for transcription...
             </div>
-
         </div>
-
         <div id="error" class="error hidden"></div>
-        </div>
 
         <div style="text-align: center; margin-top: 40px;">
             <p style="color: #E6E6E9; font-size: 1.2em; font-family: 'Aeonik-Regular', sans-serif;">
