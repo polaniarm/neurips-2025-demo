@@ -46,151 +46,246 @@
         }
 
         .container {
-            background: #1a1a1a;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(114, 51, 247, 0.2);
-            border: 1px solid rgba(114, 51, 247, 0.3);
-            padding: 40px;
+            background: #211b3b;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            padding: 80px 60px;
             max-width: 800px;
             width: 100%;
+            min-height: 500px;
+            position: relative;
         }
 
-        h1 {
-            font-family: 'Aeonik-Bold', sans-serif;
-            color: #E6E6E9;
-            margin-bottom: 10px;
-            font-size: 2.5em;
-            font-weight: normal;
-            letter-spacing: -0.02em;
+        .screen {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 350px;
         }
 
-        .subtitle {
+        #recordingScreen {
+            align-items: center;
+            justify-content: center;
+        }
+
+        .timer {
             color: #999;
-            margin-bottom: 30px;
-            font-size: 1.1em;
+            font-size: 1.8em;
+            font-family: 'Aeonik-Regular', sans-serif;
+            margin-bottom: 15px;
+            letter-spacing: 0.05em;
         }
 
-        .controls {
+        .wave-container {
+            margin: 15px 0 30px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .wave-visual {
+            width: 400px;
+            height: 100px;
+            max-width: 90%;
+        }
+
+        .recording-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 60px;
+            margin-top: 40px;
+        }
+
+        .stop-button {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            transition: transform 0.3s ease;
+        }
+
+        .stop-button:hover {
+            transform: scale(1.05);
+        }
+
+        .stop-button:active {
+            transform: scale(0.98);
+        }
+
+        .stop-button img {
+            width: 80px;
+            height: 80px;
+            display: block;
+        }
+
+        .text-button {
+            background: transparent;
+            color: #E6E6E9;
+            border: none;
+            font-family: 'Aeonik-Regular', sans-serif;
+            font-size: 1.2em;
+            cursor: pointer;
+            padding: 10px 20px;
+            transition: opacity 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .text-button:hover {
+            opacity: 0.7;
+        }
+
+        .record-button {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            transition: transform 0.3s ease;
+        }
+
+        .record-button:hover {
+            transform: scale(1.05);
+        }
+
+        .record-button:active {
+            transform: scale(0.98);
+        }
+
+        .record-button img {
+            width: auto;
+            height: auto;
+            display: block;
+        }
+
+        .instruction-text {
+            margin-top: 40px;
+            color: #E6E6E9;
+            font-size: 1.2em;
+            font-family: 'Aeonik-Regular', sans-serif;
+        }
+
+        .footer-text {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #999;
+            font-size: 0.9em;
+            font-family: 'Aeonik-Regular', sans-serif;
+        }
+
+        /* Processing Screen Styles */
+        #processingScreen {
+            align-items: center;
+            justify-content: center;
+        }
+
+        .loading-dots {
             display: flex;
             gap: 15px;
             margin-bottom: 30px;
-            flex-wrap: wrap;
         }
 
-        button {
-            flex: 1;
-            min-width: 150px;
-            padding: 15px 25px;
-            font-size: 1.1em;
-            font-family: 'Aeonik-SemiBold', sans-serif;
+        .loading-dots span {
+            width: 12px;
+            height: 12px;
+            background: #7233f7;
+            border-radius: 50%;
+            animation: pulse-dot 1.5s ease-in-out infinite;
+        }
+
+        .loading-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .loading-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes pulse-dot {
+            0%, 80%, 100% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+            40% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+        }
+
+        .processing-text {
+            color: #999;
+            font-size: 1.3em;
+            font-family: 'Aeonik-Regular', sans-serif;
+        }
+
+        /* Transcription Screen Styles */
+        #transcriptionScreen {
+            align-items: center;
+            justify-content: flex-start;
+            padding: 40px;
+        }
+
+        .transcription-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 30px;
+        }
+
+        .demo-title {
+            color: #E6E6E9;
+            font-family: 'Aeonik-Bold', sans-serif;
+            font-size: 2em;
+            margin: 0;
             font-weight: normal;
+        }
+
+        .processing-time {
+            color: #666;
+            font-family: 'Aeonik-Regular', sans-serif;
+            font-size: 0.9em;
+        }
+
+        .transcription-content {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 30px;
+        }
+
+        .transcription-text {
+            color: #E6E6E9;
+            font-family: 'Aeonik-Regular', sans-serif;
+            font-size: 1.15em;
+            line-height: 1.6;
+            text-align: left;
+        }
+
+        .done-button {
+            background: #7233f7;
+            color: white;
             border: none;
-            border-radius: 10px;
+            padding: 12px 40px;
+            font-family: 'Aeonik-SemiBold', sans-serif;
+            font-size: 1.1em;
+            border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s ease;
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
 
-        #startBtn {
-            background: #7233f7;
-            color: white;
-        }
-
-        #startBtn:hover:not(:disabled) {
+        .done-button:hover {
             background: #5a1ee5;
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(114, 51, 247, 0.4);
         }
 
-        #stopBtn {
-            background: #333;
-            color: white;
-            border: 2px solid #7233f7;
-        }
 
-        #stopBtn:hover:not(:disabled) {
-            background: #7233f7;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(114, 51, 247, 0.4);
-        }
-
-        button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none !important;
-        }
-
-        .status {
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            font-weight: 500;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        .status.recording {
-            background: rgba(114, 51, 247, 0.1);
-            color: #ff4444;
-            border: 2px solid #ff4444;
-            animation: pulse 2s infinite;
-        }
-
-        .status.processing {
-            background: rgba(114, 51, 247, 0.1);
-            color: #7233f7;
-            border: 2px solid #7233f7;
-        }
-
-        .status.ready {
-            background: rgba(114, 51, 247, 0.05);
-            color: #d1bafc;
-            border: 2px solid rgba(114, 51, 247, 0.5);
-        }
-
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.7; }
-            100% { opacity: 1; }
-        }
-
-        .result-section {
-            margin-top: 30px;
-            padding-top: 30px;
-            border-top: 2px solid #eee;
-        }
-
-        .result-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .result-header h2 {
-            color: #E6E6E9;
-            font-size: 1.5em;
-        }
-
-        .timing {
-            background: rgba(114, 51, 247, 0.1);
-            padding: 8px 15px;
-            border-radius: 20px;
-            color: #d1bafc;
-            font-size: 0.9em;
-        }
-
-        .transcript {
-            background: #0a0a0a;
-            padding: 20px;
-            border-radius: 10px;
-            min-height: 100px;
-            font-size: 1.1em;
-            line-height: 1.6;
-            color: #E6E6E9;
-            border: 1px solid rgba(114, 51, 247, 0.3);
-        }
 
         .error {
             background: rgba(255, 68, 68, 0.1);
@@ -205,10 +300,6 @@
             display: none;
         }
 
-        .audio-preview {
-            margin-top: 20px;
-            width: 100%;
-        }
 
         footer {
             margin-top: 30px;
@@ -227,38 +318,63 @@
             <img src="assets/NeurIPS-425x190-arm.png" alt="NeurIPS Logo" style="height: 65px; width: auto;">
         </div>
 
-        <div class="container">
-        <h1>Accelerate Whisper on Arm</h1>
-        <p class="subtitle">Whisper ASR with Hugging Face Transformers on Arm Infrastructure</p>
-
-        <div class="status ready" id="status">
-            Ready to record
+        <div class="container" id="mainContainer">
+        <!-- Initial Screen -->
+        <div id="initialScreen" class="screen">
+            <button id="recordButton" class="record-button">
+                <img src="assets/record.png" alt="Record" />
+            </button>
+            <p class="instruction-text">Press the button to start recording</p>
         </div>
 
-        <div class="controls">
-            <button id="startBtn">Start Recording</button>
-            <button id="stopBtn" disabled>Stop & Transcribe</button>
+        <!-- Recording Screen (hidden initially) -->
+        <div id="recordingScreen" class="screen hidden">
+            <div class="timer" id="timer">00:00.00</div>
+
+            <div class="wave-container">
+                <canvas id="waveCanvas" class="wave-visual"></canvas>
+            </div>
+
+            <div class="recording-controls">
+                <button id="stopBtn" class="stop-button">
+                    <img src="assets/stop-pause.png" alt="Stop" />
+                </button>
+            </div>
         </div>
 
-        <audio id="audioPreview" class="audio-preview hidden" controls></audio>
-
-        <div id="resultSection" class="result-section hidden">
-            <div class="result-header">
-                <h2>Transcription</h2>
-                <span class="timing" id="timing"></span>
+        <!-- Processing Screen (hidden initially) -->
+        <div id="processingScreen" class="screen hidden">
+            <div class="loading-dots">
+                <span></span>
+                <span></span>
+                <span></span>
             </div>
+            <p class="processing-text">Preparing your transcript...</p>
+        </div>
 
-            <div class="transcript" id="transcript">
-                Waiting for transcription...
+        <!-- Transcription Screen (hidden initially) -->
+        <div id="transcriptionScreen" class="screen hidden">
+            <div class="transcription-header">
+                <h2 class="demo-title">Transcription</h2>
+                <div class="processing-time" id="processingTime"></div>
             </div>
+            <div class="transcription-content">
+                <p id="transcriptionText" class="transcription-text"></p>
+            </div>
+            <button id="doneBtn" class="done-button">Done</button>
+        </div>
 
         </div>
 
         <div id="error" class="error hidden"></div>
 
-        <footer>
-            <p>Arm Learning Path - NeurIPS 2025 Demonstration</p>
-        </footer>
+        <div style="text-align: center; margin-top: 40px;">
+            <p style="color: #E6E6E9; font-size: 1.2em; font-family: 'Aeonik-Regular', sans-serif;">
+                Whisper ASR with Hugging Face Transformers on Arm Infrastructure
+            </p>
+            <p style="color: #999; font-size: 1em; margin-top: 10px; font-family: 'Aeonik-Regular', sans-serif;">
+                Demo version for supervised use
+            </p>
         </div>
     </div>
 
@@ -266,20 +382,191 @@
         let mediaRecorder;
         let audioChunks = [];
         let isRecording = false;
+        let recordingStartTime;
+        let timerInterval;
+        let audioContext;
+        let analyser;
+        let microphone;
+        let animationId;
+        let canvas;
+        let canvasCtx;
 
-        const startBtn = document.getElementById('startBtn');
+        // Screens
+        const initialScreen = document.getElementById('initialScreen');
+        const recordingScreen = document.getElementById('recordingScreen');
+        const processingScreen = document.getElementById('processingScreen');
+        const transcriptionScreen = document.getElementById('transcriptionScreen');
+        const recordButton = document.getElementById('recordButton');
+
+        // Controls
         const stopBtn = document.getElementById('stopBtn');
-        const status = document.getElementById('status');
-        const transcript = document.getElementById('transcript');
-        const timing = document.getElementById('timing');
-        const resultSection = document.getElementById('resultSection');
+        const timer = document.getElementById('timer');
+        const transcriptionText = document.getElementById('transcriptionText');
+        const processingTime = document.getElementById('processingTime');
         const errorDiv = document.getElementById('error');
-        const audioPreview = document.getElementById('audioPreview');
+        const doneBtn = document.getElementById('doneBtn');
 
         // Initialize on page load
         window.addEventListener('DOMContentLoaded', () => {
             checkServerHealth();
         });
+
+        // Handle initial record button click
+        recordButton.addEventListener('click', async () => {
+            initialScreen.classList.add('hidden');
+            recordingScreen.classList.remove('hidden');
+            // Draw flatline immediately
+            drawFlatline();
+            // Automatically start recording
+            setTimeout(() => {
+                startRecording();
+            }, 300);
+        });
+
+        // Timer functions
+        function startTimer() {
+            recordingStartTime = Date.now();
+            timerInterval = setInterval(updateTimer, 10);
+        }
+
+        function stopTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+        }
+
+        function updateTimer() {
+            const elapsed = Date.now() - recordingStartTime;
+            const minutes = Math.floor(elapsed / 60000);
+            const seconds = Math.floor((elapsed % 60000) / 1000);
+            const centiseconds = Math.floor((elapsed % 1000) / 10);
+            timer.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${String(centiseconds).padStart(2, '0')}`;
+        }
+
+        function resetTimer() {
+            stopTimer();
+            timer.textContent = '00:00.00';
+        }
+
+        // Audio visualization functions
+        function setupAudioVisualization(stream) {
+            // Initialize canvas
+            canvas = document.getElementById('waveCanvas');
+            canvasCtx = canvas.getContext('2d');
+
+            // Set canvas size
+            canvas.width = 400;
+            canvas.height = 100;
+
+            // Create audio context
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            analyser = audioContext.createAnalyser();
+            microphone = audioContext.createMediaStreamSource(stream);
+
+            analyser.fftSize = 128;  // Smaller value for fewer bars
+            const bufferLength = analyser.frequencyBinCount;
+            const dataArray = new Uint8Array(bufferLength);
+
+            microphone.connect(analyser);
+
+            function drawVisualization() {
+                animationId = requestAnimationFrame(drawVisualization);
+
+                analyser.getByteFrequencyData(dataArray);
+
+                canvasCtx.fillStyle = '#211b3b';
+                canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+
+                const barWidth = (canvas.width / bufferLength) * 1.5;
+                const centerY = canvas.height / 2;
+                let barX = 0;
+
+                for (let i = 0; i < bufferLength; i++) {
+                    const barHeight = (dataArray[i] / 255) * (canvas.height * 0.8);
+
+                    // Create gradient from purple-blue to cyan
+                    const gradientPosition = i / bufferLength;
+                    let r, g, b;
+
+                    if (gradientPosition < 0.5) {
+                        // Purple to blue gradient for left side
+                        r = Math.floor(114 - (gradientPosition * 2 * 50));
+                        g = Math.floor(51 + (gradientPosition * 2 * 100));
+                        b = Math.floor(247 - (gradientPosition * 2 * 20));
+                    } else {
+                        // Blue to cyan gradient for right side
+                        const rightGradient = (gradientPosition - 0.5) * 2;
+                        r = Math.floor(64 - (rightGradient * 30));
+                        g = Math.floor(151 + (rightGradient * 70));
+                        b = Math.floor(227 + (rightGradient * 20));
+                    }
+
+                    canvasCtx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+
+                    // Draw bar from center (like audio waveform)
+                    canvasCtx.fillRect(barX, centerY - barHeight/2, barWidth - 2, barHeight);
+
+                    barX += barWidth + 1;
+                }
+            }
+
+            drawVisualization();
+        }
+
+        function stopAudioVisualization() {
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+                animationId = null;
+            }
+            if (audioContext && audioContext.state !== 'closed') {
+                audioContext.close();
+            }
+            // Draw flatline instead of clearing
+            drawFlatline();
+        }
+
+        function drawFlatline() {
+            canvas = document.getElementById('waveCanvas');
+            canvasCtx = canvas.getContext('2d');
+
+            canvas.width = 400;
+            canvas.height = 100;
+
+            canvasCtx.fillStyle = '#211b3b';
+            canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+
+            const centerY = canvas.height / 2;
+            const numBars = 64;
+            const barWidth = (canvas.width / numBars) * 1.5;
+            let barX = 0;
+
+            for (let i = 0; i < numBars; i++) {
+                const gradientPosition = i / numBars;
+                let r, g, b;
+
+                if (gradientPosition < 0.5) {
+                    // Purple to blue gradient for left side
+                    r = Math.floor(114 - (gradientPosition * 2 * 50));
+                    g = Math.floor(51 + (gradientPosition * 2 * 100));
+                    b = Math.floor(247 - (gradientPosition * 2 * 20));
+                } else {
+                    // Blue to cyan gradient for right side
+                    const rightGradient = (gradientPosition - 0.5) * 2;
+                    r = Math.floor(64 - (rightGradient * 30));
+                    g = Math.floor(151 + (rightGradient * 70));
+                    b = Math.floor(227 + (rightGradient * 20));
+                }
+
+                // Set low opacity for flatline effect
+                canvasCtx.fillStyle = `rgba(${r}, ${g}, ${b}, 0.3)`;
+
+                // Draw thin bar at center
+                canvasCtx.fillRect(barX, centerY - 1, barWidth - 2, 2);
+
+                barX += barWidth + 1;
+            }
+        }
 
         async function checkServerHealth() {
             try {
@@ -294,7 +581,7 @@
             }
         }
 
-        startBtn.addEventListener('click', async () => {
+        async function startRecording() {
             try {
                 // Request microphone access
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -321,44 +608,57 @@
 
                 mediaRecorder.onstop = async () => {
                     const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-                    await transcribeAudio(audioBlob);
 
-                    // Show audio preview
-                    const audioUrl = URL.createObjectURL(audioBlob);
-                    audioPreview.src = audioUrl;
-                    audioPreview.classList.remove('hidden');
+                    // Only transcribe if we're finishing, not canceling
+                    if (!window.canceledRecording) {
+                        await transcribeAudio(audioBlob);
+                    }
                 };
 
                 // Start recording
                 mediaRecorder.start();
                 isRecording = true;
+                window.canceledRecording = false;
+
+                // Start timer
+                startTimer();
+
+                // Start audio visualization
+                setupAudioVisualization(stream);
 
                 // Update UI
-                startBtn.disabled = true;
-                stopBtn.disabled = false;
-                status.className = 'status recording';
-                status.textContent = 'Recording in progress... Please speak clearly';
                 hideError();
-                resultSection.classList.add('hidden');
 
             } catch (err) {
                 showError('Microphone access denied. Please allow microphone access and try again.');
                 console.error('Error accessing microphone:', err);
+                // Return to initial screen
+                recordingScreen.classList.add('hidden');
+                initialScreen.classList.remove('hidden');
             }
-        });
+        }
 
+        // Stop button - stop and transcribe
         stopBtn.addEventListener('click', () => {
             if (mediaRecorder && isRecording) {
+                stopTimer();
+                stopAudioVisualization();
+
+                // Show processing screen
+                recordingScreen.classList.add('hidden');
+                processingScreen.classList.remove('hidden');
+
                 mediaRecorder.stop();
                 mediaRecorder.stream.getTracks().forEach(track => track.stop());
                 isRecording = false;
-
-                // Update UI
-                startBtn.disabled = false;
-                stopBtn.disabled = true;
-                status.className = 'status processing';
-                status.textContent = 'Processing audio...';
             }
+        });
+
+        // Done button - return to initial screen
+        doneBtn.addEventListener('click', () => {
+            transcriptionScreen.classList.add('hidden');
+            initialScreen.classList.remove('hidden');
+            resetTimer();
         });
 
         async function transcribeAudio(audioBlob) {
@@ -379,31 +679,30 @@
 
                 const data = await response.json();
 
-                // Display results
-                displayResults(data);
+                // Show transcription screen
+                processingScreen.classList.add('hidden');
+                transcriptionScreen.classList.remove('hidden');
+
+                // Display transcription text
+                transcriptionText.textContent = data.text || 'No transcription available';
+
+                // Display processing time
+                if (data.elapsed_seconds) {
+                    processingTime.textContent = `Processing time: ${data.elapsed_seconds}s`;
+                }
 
             } catch (err) {
                 showError(`Transcription failed: ${err.message}`);
                 console.error('Transcription error:', err);
+                processingScreen.classList.add('hidden');
+                initialScreen.classList.remove('hidden');
             } finally {
-                // Reset status
-                status.className = 'status ready';
-                status.textContent = 'Ready to record';
+                // Reset button state
+                stopBtn.disabled = false;
+                stopAudioVisualization();
             }
         }
 
-        function displayResults(data) {
-            // Show result section
-            resultSection.classList.remove('hidden');
-
-            // Display transcript
-            transcript.textContent = data.text || 'No transcription available';
-
-            // Display timing
-            timing.textContent = `Processed in ${data.elapsed_seconds}s`;
-
-            hideError();
-        }
 
         function showError(message) {
             errorDiv.textContent = message;
