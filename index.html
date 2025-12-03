@@ -46,14 +46,13 @@
         }
 
         .container {
-            background: #2a2a4a;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(114, 51, 247, 0.2);
-            border: 1px solid rgba(114, 51, 247, 0.3);
-            padding: 60px;
+            background: #211b3b;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            padding: 80px 60px;
             max-width: 800px;
             width: 100%;
-            min-height: 450px;
+            min-height: 500px;
             position: relative;
         }
 
@@ -72,32 +71,41 @@
         }
 
         .record-button {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            background: #ff4444;
-            border: 6px solid white;
+            background: transparent;
+            border: none;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 20px rgba(255, 68, 68, 0.4);
+            padding: 0;
+            transition: transform 0.3s ease;
         }
 
         .record-button:hover {
             transform: scale(1.05);
-            box-shadow: 0 6px 25px rgba(255, 68, 68, 0.6);
         }
 
         .record-button:active {
             transform: scale(0.98);
         }
 
+        .record-button img {
+            width: auto;
+            height: auto;
+            display: block;
+        }
+
         .instruction-text {
-            margin-top: 30px;
+            margin-top: 40px;
             color: #E6E6E9;
-            font-size: 1.1em;
+            font-size: 1.2em;
+            font-family: 'Aeonik-Regular', sans-serif;
+        }
+
+        .footer-text {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #999;
+            font-size: 0.9em;
             font-family: 'Aeonik-Regular', sans-serif;
         }
 
@@ -277,12 +285,10 @@
         <!-- Initial Screen -->
         <div id="initialScreen" class="screen">
             <button id="recordButton" class="record-button">
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 14.5c1.66 0 3-1.34 3-3V6c0-1.66-1.34-3-3-3S9 4.34 9 6v5.5c0 1.66 1.34 3 3 3z"/>
-                    <path d="M17 11.5c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
-                </svg>
+                <img src="assets/record.png" alt="Record" />
             </button>
             <p class="instruction-text">Press the button to start recording</p>
+            <p class="footer-text">Arm Learning Path - NeurIPS 2025 Demonstration</p>
         </div>
 
         <!-- Recording Screen (hidden initially) -->
