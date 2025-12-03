@@ -89,6 +89,26 @@
             width: 350px;
             height: auto;
             max-width: 90%;
+            animation: waveAnimation 2s ease-in-out infinite;
+        }
+
+        @keyframes waveAnimation {
+            0%, 100% {
+                transform: scaleY(1) translateX(0);
+                opacity: 0.9;
+            }
+            25% {
+                transform: scaleY(1.1) translateX(-2px);
+                opacity: 1;
+            }
+            50% {
+                transform: scaleY(0.95) translateX(2px);
+                opacity: 0.95;
+            }
+            75% {
+                transform: scaleY(1.05) translateX(-1px);
+                opacity: 1;
+            }
         }
 
         .recording-controls {
