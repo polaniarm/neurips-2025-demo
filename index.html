@@ -177,48 +177,88 @@
             font-family: 'Aeonik-Regular', sans-serif;
         }
 
-
-        .result-section {
-            margin-top: 30px;
-            padding-top: 30px;
-            border-top: 2px solid #eee;
-            display: none;
-        }
-
-        .result-section:not(.hidden) {
-            display: block;
-        }
-
-        .result-header {
-            display: flex;
-            justify-content: space-between;
+        /* Processing Screen Styles */
+        #processingScreen {
             align-items: center;
-            margin-bottom: 15px;
+            justify-content: center;
         }
 
-        .result-header h2 {
+        .loading-dots {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .loading-dots span {
+            width: 12px;
+            height: 12px;
+            background: #7233f7;
+            border-radius: 50%;
+            animation: pulse-dot 1.5s ease-in-out infinite;
+        }
+
+        .loading-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .loading-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes pulse-dot {
+            0%, 80%, 100% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+            40% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+        }
+
+        .processing-text {
+            color: #999;
+            font-size: 1.3em;
+            font-family: 'Aeonik-Regular', sans-serif;
+        }
+
+        /* Transcription Screen Styles */
+        #transcriptionScreen {
+            align-items: flex-start;
+            justify-content: flex-start;
+            padding: 40px;
+        }
+
+        .demo-title {
             color: #E6E6E9;
-            font-size: 1.5em;
+            font-family: 'Aeonik-Bold', sans-serif;
+            font-size: 2em;
+            margin-bottom: 30px;
+            font-weight: normal;
         }
 
-        .timing {
-            background: rgba(114, 51, 247, 0.1);
-            padding: 8px 15px;
-            border-radius: 20px;
-            color: #d1bafc;
-            font-size: 0.9em;
+        .transcription-content {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 20px;
         }
 
-        .transcript {
-            background: #0a0a0a;
-            padding: 20px;
-            border-radius: 10px;
-            min-height: 100px;
-            font-size: 1.1em;
+        .transcription-text {
+            color: #E6E6E9;
+            font-family: 'Aeonik-Regular', sans-serif;
+            font-size: 1.15em;
             line-height: 1.6;
-            color: #E6E6E9;
-            border: 1px solid rgba(114, 51, 247, 0.3);
+            text-align: left;
         }
+
+        .processing-time {
+            color: #666;
+            font-family: 'Aeonik-Regular', sans-serif;
+            font-size: 0.9em;
+            margin-top: auto;
+        }
+
+
 
         .error {
             background: rgba(255, 68, 68, 0.1);
@@ -284,18 +324,28 @@
             </div>
         </div>
 
+        <!-- Processing Screen (hidden initially) -->
+        <div id="processingScreen" class="screen hidden">
+            <div class="loading-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <p class="processing-text">Preparing your transcript...</p>
+        </div>
+
+        <!-- Transcription Screen (hidden initially) -->
+        <div id="transcriptionScreen" class="screen hidden">
+            <h2 class="demo-title">Demo 1</h2>
+            <div class="transcription-content">
+                <p id="transcriptionText" class="transcription-text"></p>
+            </div>
+            <div class="processing-time" id="processingTime"></div>
+        </div>
+
         </div>
 
         <audio id="audioPreview" class="audio-preview hidden" controls></audio>
-        <div id="resultSection" class="result-section hidden">
-            <div class="result-header">
-                <h2>Transcription</h2>
-                <span class="timing" id="timing"></span>
-            </div>
-            <div class="transcript" id="transcript">
-                Waiting for transcription...
-            </div>
-        </div>
         <div id="error" class="error hidden"></div>
 
         <div style="text-align: center; margin-top: 40px;">
@@ -324,14 +374,15 @@
         // Screens
         const initialScreen = document.getElementById('initialScreen');
         const recordingScreen = document.getElementById('recordingScreen');
+        const processingScreen = document.getElementById('processingScreen');
+        const transcriptionScreen = document.getElementById('transcriptionScreen');
         const recordButton = document.getElementById('recordButton');
 
         // Controls
         const stopBtn = document.getElementById('stopBtn');
         const timer = document.getElementById('timer');
-        const transcript = document.getElementById('transcript');
-        const timing = document.getElementById('timing');
-        const resultSection = document.getElementById('resultSection');
+        const transcriptionText = document.getElementById('transcriptionText');
+        const processingTime = document.getElementById('processingTime');
         const errorDiv = document.getElementById('error');
         const audioPreview = document.getElementById('audioPreview');
 
@@ -562,7 +613,6 @@
 
                 // Update UI
                 hideError();
-                resultSection.classList.add('hidden');
 
             } catch (err) {
                 showError('Microphone access denied. Please allow microphone access and try again.');
@@ -579,8 +629,9 @@
                 stopTimer();
                 stopAudioVisualization();
 
-                // Disable button during processing
-                stopBtn.disabled = true;
+                // Show processing screen
+                recordingScreen.classList.add('hidden');
+                processingScreen.classList.remove('hidden');
 
                 mediaRecorder.stop();
                 mediaRecorder.stream.getTracks().forEach(track => track.stop());
@@ -606,38 +657,37 @@
 
                 const data = await response.json();
 
-                // Display results
-                displayResults(data);
+                // Show transcription screen
+                processingScreen.classList.add('hidden');
+                transcriptionScreen.classList.remove('hidden');
+
+                // Display transcription text
+                transcriptionText.textContent = data.text || 'No transcription available';
+
+                // Display processing time
+                if (data.elapsed_seconds) {
+                    processingTime.textContent = `Processing time: ${data.elapsed_seconds}s`;
+                }
+
+                // Return to initial screen after 5 seconds
+                setTimeout(() => {
+                    transcriptionScreen.classList.add('hidden');
+                    initialScreen.classList.remove('hidden');
+                    resetTimer();
+                }, 5000);
 
             } catch (err) {
                 showError(`Transcription failed: ${err.message}`);
                 console.error('Transcription error:', err);
+                processingScreen.classList.add('hidden');
+                initialScreen.classList.remove('hidden');
             } finally {
                 // Reset button state
                 stopBtn.disabled = false;
-
-                // Return to initial screen after transcription
-                setTimeout(() => {
-                    recordingScreen.classList.add('hidden');
-                    initialScreen.classList.remove('hidden');
-                    resetTimer();
-                    stopAudioVisualization();
-                }, 3000);
+                stopAudioVisualization();
             }
         }
 
-        function displayResults(data) {
-            // Show result section
-            resultSection.classList.remove('hidden');
-
-            // Display transcript
-            transcript.textContent = data.text || 'No transcription available';
-
-            // Display timing
-            timing.textContent = `Processed in ${data.elapsed_seconds}s`;
-
-            hideError();
-        }
 
         function showError(message) {
             errorDiv.textContent = message;
