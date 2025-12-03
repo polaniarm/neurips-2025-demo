@@ -256,6 +256,27 @@
             font-family: 'Aeonik-Regular', sans-serif;
             font-size: 0.9em;
             margin-top: auto;
+            margin-bottom: 20px;
+        }
+
+        .done-button {
+            background: #7233f7;
+            color: white;
+            border: none;
+            padding: 12px 40px;
+            font-family: 'Aeonik-SemiBold', sans-serif;
+            font-size: 1.1em;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .done-button:hover {
+            background: #5a1ee5;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(114, 51, 247, 0.4);
         }
 
 
@@ -273,15 +294,6 @@
             display: none;
         }
 
-        .audio-preview {
-            margin-top: 20px;
-            width: 100%;
-            display: none;
-        }
-
-        .audio-preview:not(.hidden) {
-            display: block;
-        }
 
         footer {
             margin-top: 30px;
@@ -336,16 +348,16 @@
 
         <!-- Transcription Screen (hidden initially) -->
         <div id="transcriptionScreen" class="screen hidden">
-            <h2 class="demo-title">Demo 1</h2>
+            <h2 class="demo-title">Transcription</h2>
             <div class="transcription-content">
                 <p id="transcriptionText" class="transcription-text"></p>
             </div>
             <div class="processing-time" id="processingTime"></div>
+            <button id="doneBtn" class="done-button">Done</button>
         </div>
 
         </div>
 
-        <audio id="audioPreview" class="audio-preview hidden" controls></audio>
         <div id="error" class="error hidden"></div>
 
         <div style="text-align: center; margin-top: 40px;">
@@ -384,7 +396,7 @@
         const transcriptionText = document.getElementById('transcriptionText');
         const processingTime = document.getElementById('processingTime');
         const errorDiv = document.getElementById('error');
-        const audioPreview = document.getElementById('audioPreview');
+        const doneBtn = document.getElementById('doneBtn');
 
         // Initialize on page load
         window.addEventListener('DOMContentLoaded', () => {
@@ -592,11 +604,6 @@
                     // Only transcribe if we're finishing, not canceling
                     if (!window.canceledRecording) {
                         await transcribeAudio(audioBlob);
-
-                        // Show audio preview
-                        const audioUrl = URL.createObjectURL(audioBlob);
-                        audioPreview.src = audioUrl;
-                        audioPreview.classList.remove('hidden');
                     }
                 };
 
@@ -639,6 +646,13 @@
             }
         });
 
+        // Done button - return to initial screen
+        doneBtn.addEventListener('click', () => {
+            transcriptionScreen.classList.add('hidden');
+            initialScreen.classList.remove('hidden');
+            resetTimer();
+        });
+
         async function transcribeAudio(audioBlob) {
             try {
                 // Create FormData and append the audio file
@@ -668,13 +682,6 @@
                 if (data.elapsed_seconds) {
                     processingTime.textContent = `Processing time: ${data.elapsed_seconds}s`;
                 }
-
-                // Return to initial screen after 5 seconds
-                setTimeout(() => {
-                    transcriptionScreen.classList.add('hidden');
-                    initialScreen.classList.remove('hidden');
-                    resetTimer();
-                }, 5000);
 
             } catch (err) {
                 showError(`Transcription failed: ${err.message}`);
