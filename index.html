@@ -278,13 +278,9 @@
             </div>
 
             <div class="recording-controls">
-                <button id="cancelBtn" class="text-button">Cancel</button>
-
                 <button id="stopBtn" class="stop-button">
                     <img src="assets/stop-pause.png" alt="Stop" />
                 </button>
-
-                <button id="finishBtn" class="text-button">FINISH</button>
             </div>
         </div>
 
@@ -325,9 +321,7 @@
         const recordButton = document.getElementById('recordButton');
 
         // Controls
-        const cancelBtn = document.getElementById('cancelBtn');
         const stopBtn = document.getElementById('stopBtn');
-        const finishBtn = document.getElementById('finishBtn');
         const timer = document.getElementById('timer');
         const transcript = document.getElementById('transcript');
         const timing = document.getElementById('timing');
@@ -449,34 +443,13 @@
             }
         }
 
-        // Cancel button - go back to initial screen
-        cancelBtn.addEventListener('click', () => {
-            if (mediaRecorder && isRecording) {
-                window.canceledRecording = true;
-                mediaRecorder.stop();
-                mediaRecorder.stream.getTracks().forEach(track => track.stop());
-                isRecording = false;
-            }
-            resetTimer();
-            recordingScreen.classList.add('hidden');
-            initialScreen.classList.remove('hidden');
-        });
-
-        // Stop button - pause/resume recording
+        // Stop button - stop and transcribe
         stopBtn.addEventListener('click', () => {
-            // For now, just act as a pause button (no-op)
-            // You could implement pause/resume functionality here
-        });
-
-        // Finish button - stop and transcribe
-        finishBtn.addEventListener('click', () => {
             if (mediaRecorder && isRecording) {
                 stopTimer();
 
-                // Show processing state
-                finishBtn.textContent = 'PROCESSING...';
-                finishBtn.disabled = true;
-                cancelBtn.disabled = true;
+                // Disable button during processing
+                stopBtn.disabled = true;
 
                 mediaRecorder.stop();
                 mediaRecorder.stream.getTracks().forEach(track => track.stop());
@@ -509,10 +482,8 @@
                 showError(`Transcription failed: ${err.message}`);
                 console.error('Transcription error:', err);
             } finally {
-                // Reset button states
-                finishBtn.textContent = 'FINISH';
-                finishBtn.disabled = false;
-                cancelBtn.disabled = false;
+                // Reset button state
+                stopBtn.disabled = false;
 
                 // Return to initial screen after transcription
                 setTimeout(() => {
