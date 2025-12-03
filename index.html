@@ -344,6 +344,8 @@
         recordButton.addEventListener('click', async () => {
             initialScreen.classList.add('hidden');
             recordingScreen.classList.remove('hidden');
+            // Draw flatline immediately
+            drawFlatline();
             // Automatically start recording
             setTimeout(() => {
                 startRecording();
@@ -449,8 +451,49 @@
             if (audioContext && audioContext.state !== 'closed') {
                 audioContext.close();
             }
-            if (canvasCtx) {
-                canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+            // Draw flatline instead of clearing
+            drawFlatline();
+        }
+
+        function drawFlatline() {
+            canvas = document.getElementById('waveCanvas');
+            canvasCtx = canvas.getContext('2d');
+
+            canvas.width = 400;
+            canvas.height = 100;
+
+            canvasCtx.fillStyle = '#211b3b';
+            canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+
+            const centerY = canvas.height / 2;
+            const numBars = 64;
+            const barWidth = (canvas.width / numBars) * 1.5;
+            let barX = 0;
+
+            for (let i = 0; i < numBars; i++) {
+                const gradientPosition = i / numBars;
+                let r, g, b;
+
+                if (gradientPosition < 0.5) {
+                    // Purple to blue gradient for left side
+                    r = Math.floor(114 - (gradientPosition * 2 * 50));
+                    g = Math.floor(51 + (gradientPosition * 2 * 100));
+                    b = Math.floor(247 - (gradientPosition * 2 * 20));
+                } else {
+                    // Blue to cyan gradient for right side
+                    const rightGradient = (gradientPosition - 0.5) * 2;
+                    r = Math.floor(64 - (rightGradient * 30));
+                    g = Math.floor(151 + (rightGradient * 70));
+                    b = Math.floor(227 + (rightGradient * 20));
+                }
+
+                // Set low opacity for flatline effect
+                canvasCtx.fillStyle = `rgba(${r}, ${g}, ${b}, 0.3)`;
+
+                // Draw thin bar at center
+                canvasCtx.fillRect(barX, centerY - 1, barWidth - 2, 2);
+
+                barX += barWidth + 1;
             }
         }
 
